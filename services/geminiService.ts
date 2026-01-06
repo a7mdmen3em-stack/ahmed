@@ -22,6 +22,52 @@ export const getDailySupport = async (content: string, type: 'morning' | 'night'
   }
 };
 
+export const generateAIImage = async (
+  description: string, 
+  type: 'avatar' | 'cover', 
+  gender: 'male' | 'female' = 'male'
+) => {
+  try {
+    let prompt = "";
+    if (type === 'avatar') {
+      prompt = `Create a high-quality, minimalist 2D vector human-like avatar for a profile. 
+      The character is a ${gender}. Style: Modern, clean, professional digital art. 
+      User Description (translate and incorporate): ${description}. 
+      Ensure the background is flat and the lighting is soft. No realistic photo faces, keep it stylized and anonymous.`;
+    } else {
+      prompt = `Create a high-quality, aesthetic background cover image (16:9 aspect ratio). 
+      Theme: Mental health, peace, and serenity. Style: Abstract or nature-inspired digital art. 
+      User Description (translate and incorporate): ${description}. 
+      No text in image, soft colors, professional landscape orientation.`;
+    }
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-image',
+      contents: [{ parts: [{ text: prompt }] }],
+      config: {
+        imageConfig: {
+          aspectRatio: type === 'avatar' ? "1:1" : "16:9"
+        }
+      }
+    });
+
+    for (const part of response.candidates[0].content.parts) {
+      if (part.inlineData) {
+        return `data:image/png;base64,${part.inlineData.data}`;
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error("Image Generation Error:", error);
+    return null;
+  }
+};
+
+export const generateAIAvatar = async (mood: string, color: string, gender: 'male' | 'female' = 'male') => {
+  const description = `Mood: ${mood}, Primary Color: ${color}.`;
+  return generateAIImage(description, 'avatar', gender);
+};
+
 export const createSupportChat = () => {
   return ai.chats.create({
     model: 'gemini-flash-lite-latest',
