@@ -1,0 +1,21 @@
+{
+  "name": "Copy of Safe Space - مساحة آمنة",
+  "short_name": "SafeSpace",
+  "description": "تطبيق فويس نفسي آمن للفضفضة والدعم النفسي المجهول مع جلسات جماعية وخاصة ومتابعة يومية.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3595/3595996.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
